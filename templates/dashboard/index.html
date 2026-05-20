@@ -3,14 +3,19 @@
 {% block content %}
 <section class="hero">
     <div>
-        <p class="eyebrow">Portfolio dashboard</p>
-        <h1>Grow, track, and withdraw from one professional workspace.</h1>
-        <p>Invite code: <strong>{{ user.referral_code }}</strong></p>
+        <p class="eyebrow">Global lending dashboard</p>
+        <h1>Capital access, portfolio control, and lender-grade transparency.</h1>
+        <p class="hero-copy">Track funding, active trades, referral earnings, withdrawals, and global lending signals from a calm professional workspace.</p>
+        <div class="hero-actions">
+            <a class="button" href="{% url 'deposit' %}">Fund wallet</a>
+            <a class="button secondary" href="{% url 'invest' %}">Open invest desk</a>
+        </div>
     </div>
-    <div class="hero-actions">
-        <a class="button" href="{% url 'deposit' %}">Make deposit</a>
-        <a class="button secondary" href="{% url 'invest' %}">Start trade</a>
-    </div>
+    <aside class="dashboard-brief">
+        <span>Verified member code</span>
+        <strong>{{ user.referral_code }}</strong>
+        <p>Invite trusted members and build commission income from qualifying investment activity.</p>
+    </aside>
 </section>
 
 <section class="metrics">
@@ -23,31 +28,44 @@
 
 <section class="section-head">
     <div>
-        <p class="eyebrow">Trading sessions</p>
-        <h2>Investment plans</h2>
+        <p class="eyebrow">Market pulse</p>
+        <h2>Trending insights</h2>
     </div>
-    <a href="{% url 'invest' %}">View all</a>
+    <a href="{% url 'invest' %}">Open invest desk</a>
 </section>
-<section class="plan-grid">
-    {% for plan in plans %}
-        <article class="plan-card">
-            <div>
-                <h3>{{ plan.name }}</h3>
-                <p>{{ plan.description }}</p>
-            </div>
-            <dl>
-                <div><dt>Invest</dt><dd>KSh {{ plan.amount }}</dd></div>
-                <div><dt>Return</dt><dd>KSh {{ plan.return_amount }}</dd></div>
-                <div><dt>Duration</dt><dd>{{ plan.duration_days }} days</dd></div>
-            </dl>
-            <form method="post" action="{% url 'invest' %}">
-                {% csrf_token %}
-                <input type="hidden" name="plan" value="{{ plan.id }}">
-                <button class="button full" type="submit">Invest now</button>
-            </form>
+<section class="market-grid">
+    {% for update in market_updates %}
+        <article class="market-card {{ update.tone }}">
+            <span>{{ update.label }}</span>
+            <h3>{{ update.title }}</h3>
+            <p>{{ update.summary }}</p>
         </article>
-    {% empty %}
-        <p>No plans have been configured yet.</p>
+    {% endfor %}
+</section>
+
+<section class="funding-panel">
+    <div>
+        <p class="eyebrow">Funding reach</p>
+        <h2>Trusted lender markets</h2>
+        <p>HelaVest is positioned for a global funding audience, presenting a clean experience for users who expect clarity across wallet, trading, referral, and withdrawal activity.</p>
+    </div>
+    <div class="region-grid">
+        {% for region in funding_regions %}
+            <article>
+                <strong>{{ region.country }}</strong>
+                <span>{{ region.label }}</span>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="action-strip">
+    {% for action in quick_actions %}
+        <a href="{% url action.url %}" class="action-card">
+            <span>0{{ forloop.counter }}</span>
+            <strong>{{ action.title }}</strong>
+            <p>{{ action.body }}</p>
+        </a>
     {% endfor %}
 </section>
 
@@ -116,5 +134,12 @@
         </div>
     </article>
 </section>
-{% endblock %}
 
+<section class="approval-note">
+    <div>
+        <span>Business endnote</span>
+        <strong>{{ business_approval_note }}</strong>
+    </div>
+    <p>Staff-only controls manage records, transactions, plans, referrals, and withdrawal reviews through a secured back office.</p>
+</section>
+{% endblock %}
