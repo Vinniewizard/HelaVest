@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Withdraw | HelaVest{% endblock %}
+{% block content %}
+<section class="auth-shell">
+    <div class="auth-panel">
+        <p class="eyebrow">Withdraw funds</p>
+        <h1>Request withdrawal</h1>
+        <p class="muted center">Available balance: <strong>KSh {{ balance }}</strong></p>
+        <form method="post" class="form-card">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="button full" type="submit">Submit request</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+

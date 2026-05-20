@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Deposit | HelaVest{% endblock %}
+{% block content %}
+<section class="auth-shell">
+    <div class="auth-panel">
+        <p class="eyebrow">Fund account</p>
+        <h1>Make a deposit</h1>
+        <form method="post" class="form-card">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="button full" type="submit">Record deposit</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+

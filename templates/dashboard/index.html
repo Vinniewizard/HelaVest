@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | HelaVest{% endblock %}
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">Portfolio dashboard</p>
+        <h1>Grow, track, and withdraw from one professional workspace.</h1>
+        <p>Invite code: <strong>{{ user.referral_code }}</strong></p>
+    </div>
+    <div class="hero-actions">
+        <a class="button" href="{% url 'deposit' %}">Make deposit</a>
+        <a class="button secondary" href="{% url 'invest' %}">Start trade</a>
+    </div>
+</section>
+
+<section class="metrics">
+    <article><span>Available balance</span><strong>KSh {{ available_balance|floatformat:0 }}</strong></article>
+    <article><span>Total deposits</span><strong>KSh {{ total_deposits|floatformat:0 }}</strong></article>
+    <article><span>Active capital</span><strong>KSh {{ active_capital|floatformat:0 }}</strong></article>
+    <article><span>Referral commission</span><strong>KSh {{ referral_bonus|floatformat:0 }}</strong></article>
+    <article><span>Completed profit</span><strong>KSh {{ completed_profit|floatformat:0 }}</strong></article>
+</section>
+
+<section class="section-head">
+    <div>
+        <p class="eyebrow">Trading sessions</p>
+        <h2>Investment plans</h2>
+    </div>
+    <a href="{% url 'invest' %}">View all</a>
+</section>
+<section class="plan-grid">
+    {% for plan in plans %}
+        <article class="plan-card">
+            <div>
+                <h3>{{ plan.name }}</h3>
+                <p>{{ plan.description }}</p>
+            </div>
+            <dl>
+                <div><dt>Invest</dt><dd>KSh {{ plan.amount }}</dd></div>
+                <div><dt>Return</dt><dd>KSh {{ plan.return_amount }}</dd></div>
+                <div><dt>Duration</dt><dd>{{ plan.duration_days }} days</dd></div>
+            </dl>
+            <form method="post" action="{% url 'invest' %}">
+                {% csrf_token %}
+                <input type="hidden" name="plan" value="{{ plan.id }}">
+                <button class="button full" type="submit">Invest now</button>
+            </form>
+        </article>
+    {% empty %}
+        <p>No plans have been configured yet.</p>
+    {% endfor %}
+</section>
+
+<section class="split">
+    <article>
+        <div class="section-head compact"><h2>Active trades</h2><a href="{% url 'trades' %}">History</a></div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Plan</th><th>Capital</th><th>Return</th><th>Matures</th></tr></thead>
+                <tbody>
+                    {% for trade in active_trades %}
+                        <tr>
+                            <td>{{ trade.plan.name }}</td>
+                            <td>KSh {{ trade.amount }}</td>
+                            <td>KSh {{ trade.return_amount }}</td>
+                            <td>{{ trade.matures_at|date:"M d, Y" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="4">No active trades yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+    <article>
+        <div class="section-head compact"><h2>Recent transactions</h2><a href="{% url 'transactions' %}">All</a></div>
+        <div class="activity-list">
+            {% for transaction in transactions %}
+                <div>
+                    <strong>{{ transaction.get_transaction_type_display }}</strong>
+                    <span>KSh {{ transaction.amount }} · {{ transaction.get_status_display }}</span>
+                </div>
+            {% empty %}
+                <p>No transactions yet.</p>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="split">
+    <article>
+        <div class="section-head compact"><h2>Invite earnings</h2></div>
+        <p class="muted">Share your code <strong>{{ user.referral_code }}</strong>. You earn commission when invited users invest.</p>
+        <div class="activity-list">
+            {% for referral in referrals %}
+                <div>
+                    <strong>{{ referral.referred_user.username }}</strong>
+                    <span>KSh {{ referral.bonus }} commission</span>
+                </div>
+            {% empty %}
+                <p>No referral commissions yet.</p>
+            {% endfor %}
+        </div>
+    </article>
+    <article>
+        <div class="section-head compact"><h2>Completed trades</h2></div>
+        <div class="activity-list">
+            {% for trade in trade_history %}
+                <div>
+                    <strong>{{ trade.plan.name }}</strong>
+                    <span>KSh {{ trade.return_amount }} · {{ trade.get_status_display }}</span>
+                </div>
+            {% empty %}
+                <p>No completed trades yet.</p>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}
+

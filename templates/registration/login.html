@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Login | HelaVest{% endblock %}
+{% block content %}
+<section class="auth-shell">
+    <div class="auth-panel">
+        <p class="eyebrow">Secure access</p>
+        <h1>Welcome back</h1>
+        <form method="post" class="form-card">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="button full" type="submit">Login</button>
+        </form>
+        <p class="muted center">New here? <a href="{% url 'register' %}">Create your account</a></p>
+    </div>
+</section>
+{% endblock %}
+

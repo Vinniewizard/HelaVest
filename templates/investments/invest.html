@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Invest | HelaVest{% endblock %}
+{% block content %}
+<section class="invest-hero">
+    <div>
+        <p class="eyebrow">Trading session</p>
+        <h1>Choose a plan that fits your balance and timeline.</h1>
+        <p class="hero-copy">Compare payouts, daily profit, ROI, maturity dates, and start a session without leaving the investment desk.</p>
+    </div>
+    <aside class="balance-card">
+        <span>Available to invest</span>
+        <strong>KSh {{ stats.available_balance|floatformat:0 }}</strong>
+        <div class="hero-actions stacked">
+            <a class="button full" href="{% url 'deposit' %}">Add funds</a>
+            <a class="button secondary full" href="{% url 'trades' %}">View trades</a>
+        </div>
+    </aside>
+</section>
+
+<section class="metrics invest-metrics">
+    <article><span>Active trades</span><strong>{{ stats.active_count }}</strong></article>
+    <article><span>Active capital</span><strong>KSh {{ stats.active_capital|floatformat:0 }}</strong></article>
+    <article><span>Expected returns</span><strong>KSh {{ stats.expected_active_returns|floatformat:0 }}</strong></article>
+    <article><span>Completed profit</span><strong>KSh {{ stats.completed_profit|floatformat:0 }}</strong></article>
+</section>
+
+<section class="invest-layout">
+    <aside class="strategy-panel">
+        <div>
+            <p class="eyebrow">Investment desk</p>
+            <h2>Plan tools</h2>
+        </div>
+        <div class="strategy-list">
+            <div><span>Available plans</span><strong>{{ stats.plan_count }}</strong></div>
+            {% if stats.starter_plan %}
+                <div><span>Lowest entry</span><strong>KSh {{ stats.starter_plan.amount }}</strong></div>
+            {% endif %}
+            {% if stats.popular_plan %}
+                <div><span>Featured plan</span><strong>{{ stats.popular_plan.name }}</strong></div>
+            {% endif %}
+        </div>
+        <div class="tip-box">
+            <strong>Quick rule</strong>
+            <p>Fund your account first, choose a plan, then track the maturity date from Active trades.</p>
+        </div>
+        <div class="mini-trades">
+            <h3>Running sessions</h3>
+            {% for trade in active_trades %}
+                <div class="mini-trade">
+                    <span>{{ trade.plan.name }}</span>
+                    <strong>{{ trade.progress_percent }}%</strong>
+                    <div class="progress"><span style="width: {{ trade.progress_percent }}%"></span></div>
+                </div>
+            {% empty %}
+                <p class="muted">No running sessions yet.</p>
+            {% endfor %}
+        </div>
+    </aside>
+
+    <section class="plan-grid enhanced">
+    {% for plan in plans %}
+        <article class="plan-card invest-plan {% if stats.available_balance >= plan.amount %}ready{% else %}locked{% endif %}">
+            <div class="plan-topline">
+                <span class="badge">{% if stats.available_balance >= plan.amount %}Ready{% else %}Needs deposit{% endif %}</span>
+                <span>{{ plan.duration_days }} days</span>
+            </div>
+            <div>
+                <h3>{{ plan.name }}</h3>
+                <p>{{ plan.description }}</p>
+            </div>
+            <dl>
+                <div><dt>Amount</dt><dd>KSh {{ plan.amount }}</dd></div>
+                <div><dt>Payout</dt><dd>KSh {{ plan.return_amount }}</dd></div>
+                <div><dt>ROI</dt><dd>{{ plan.roi_percent }}%</dd></div>
+                <div><dt>Daily profit</dt><dd>KSh {{ plan.daily_profit }}</dd></div>
+                <div><dt>Profit</dt><dd>KSh {{ plan.profit }}</dd></div>
+                <div><dt>Maturity</dt><dd>Day {{ plan.duration_days }}</dd></div>
+            </dl>
+            <div class="plan-return">
+                <span>Projected profit</span>
+                <strong>KSh {{ plan.profit }}</strong>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="plan" value="{{ plan.id }}">
+                {% if stats.available_balance >= plan.amount %}
+                    <button class="button full" type="submit">Start this plan</button>
+                {% else %}
+                    <a class="button secondary full" href="{% url 'deposit' %}">Deposit to unlock</a>
+                {% endif %}
+            </form>
+        </article>
+    {% empty %}
+        <article class="empty-state">
+            <h3>No plans available</h3>
+            <p>Ask an administrator to activate investment plans.</p>
+        </article>
+    {% endfor %}
+    </section>
+</section>
+{% endblock %}

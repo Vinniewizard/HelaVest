@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Trades | HelaVest{% endblock %}
+{% block content %}
+<section class="page-title">
+    <p class="eyebrow">Portfolio records</p>
+    <h1>Active and historical trades</h1>
+</section>
+
+<section class="metrics invest-metrics">
+    <article><span>Total trades</span><strong>{{ stats.total_trades }}</strong></article>
+    <article><span>Active</span><strong>{{ stats.active_trades }}</strong></article>
+    <article><span>Completed</span><strong>{{ stats.completed_trades }}</strong></article>
+    <article><span>Total capital</span><strong>KSh {{ stats.total_capital|floatformat:0 }}</strong></article>
+    <article><span>Expected returns</span><strong>KSh {{ stats.expected_returns|floatformat:0 }}</strong></article>
+</section>
+
+<section class="filter-bar">
+    <a class="{% if selected_status == 'all' %}active{% endif %}" href="{% url 'trades' %}">All</a>
+    <a class="{% if selected_status == 'active' %}active{% endif %}" href="{% url 'trades' %}?status=active">Active</a>
+    <a class="{% if selected_status == 'completed' %}active{% endif %}" href="{% url 'trades' %}?status=completed">Completed</a>
+    <a class="{% if selected_status == 'cancelled' %}active{% endif %}" href="{% url 'trades' %}?status=cancelled">Cancelled</a>
+    <a class="button small" href="{% url 'invest' %}">Start new trade</a>
+</section>
+
+{% if active_trades %}
+<section class="active-trade-grid">
+    {% for trade in active_trades %}
+        <article class="active-trade-card">
+            <div class="plan-topline">
+                <span class="badge">Active</span>
+                <span>{{ trade.days_left }} days left</span>
+            </div>
+            <h3>{{ trade.plan.name }}</h3>
+            <div class="progress"><span style="width: {{ trade.progress_percent }}%"></span></div>
+            <dl>
+                <div><dt>Capital</dt><dd>KSh {{ trade.amount }}</dd></div>
+                <div><dt>Payout</dt><dd>KSh {{ trade.return_amount }}</dd></div>
+                <div><dt>Profit</dt><dd>KSh {{ trade.profit }}</dd></div>
+                <div><dt>Matures</dt><dd>{{ trade.matures_at|date:"M d" }}</dd></div>
+            </dl>
+        </article>
+    {% endfor %}
+</section>
+{% endif %}
+
+<section class="table-wrap">
+    <table>
+        <thead><tr><th>Plan</th><th>Capital</th><th>Return</th><th>Profit</th><th>Status</th><th>Progress</th><th>Started</th><th>Matures</th></tr></thead>
+        <tbody>
+            {% for trade in trades %}
+                <tr>
+                    <td>{{ trade.plan.name }}</td>
+                    <td>KSh {{ trade.amount }}</td>
+                    <td>KSh {{ trade.return_amount }}</td>
+                    <td>KSh {{ trade.profit }}</td>
+                    <td><span class="status-pill {{ trade.status }}">{{ trade.get_status_display }}</span></td>
+                    <td>{{ trade.progress_percent }}%</td>
+                    <td>{{ trade.created_at|date:"M d, Y" }}</td>
+                    <td>{{ trade.matures_at|date:"M d, Y" }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="8">No trades match this view.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
