@@ -1,17 +1,23 @@
 :root {
-    --bg: #eef4f3;
+    --bg: #edf4f2;
     --panel: #ffffff;
+    --panel-soft: rgba(255, 255, 255, .78);
     --ink: #0f1720;
     --muted: #667085;
     --line: #d8e4e1;
     --primary: #007a5a;
     --primary-dark: #004d3a;
+    --primary-light: #35c49b;
     --gold: #d89b25;
+    --gold-light: #ffe4a3;
     --blue: #2857c8;
+    --blue-dark: #172b75;
     --navy: #132238;
     --teal-soft: #e3f7ef;
     --gold-soft: #fff4d7;
     --blue-soft: #eaf0ff;
+    --shadow: 0 18px 46px rgba(15, 23, 32, .10);
+    --shadow-soft: 0 10px 28px rgba(15, 23, 32, .07);
     --danger: #b83232;
 }
 
@@ -22,9 +28,10 @@
 body {
     margin: 0;
     background:
-        radial-gradient(circle at top left, rgba(0, 122, 90, .14), transparent 34rem),
-        radial-gradient(circle at 88% 8%, rgba(216, 155, 37, .16), transparent 22rem),
-        linear-gradient(180deg, #fbfcfd 0%, var(--bg) 30rem);
+        radial-gradient(circle at 12% 0%, rgba(0, 122, 90, .18), transparent 34rem),
+        radial-gradient(circle at 88% 6%, rgba(216, 155, 37, .20), transparent 24rem),
+        radial-gradient(circle at 50% 42rem, rgba(40, 87, 200, .08), transparent 34rem),
+        linear-gradient(180deg, #fbfdfc 0%, var(--bg) 34rem);
     color: var(--ink);
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -45,7 +52,7 @@ main {
     justify-content: space-between;
     min-height: 72px;
     padding: 0 max(16px, calc((100vw - 1180px) / 2));
-    background: rgba(255, 255, 255, .92);
+    background: rgba(255, 255, 255, .88);
     border-bottom: 1px solid var(--line);
     backdrop-filter: blur(14px);
     position: sticky;
@@ -54,9 +61,10 @@ main {
 }
 
 .brand {
-    color: var(--ink);
+    color: var(--primary-dark);
     font-size: 1.35rem;
     font-weight: 800;
+    letter-spacing: .02em;
 }
 
 nav {
@@ -64,6 +72,15 @@ nav {
     align-items: center;
     gap: 18px;
     flex-wrap: wrap;
+}
+
+nav a {
+    color: #263545;
+    font-weight: 700;
+}
+
+nav a:hover {
+    color: var(--primary);
 }
 
 .button {
@@ -74,14 +91,23 @@ nav {
     padding: 0 18px;
     border: 0;
     border-radius: 8px;
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: #fff;
     font-weight: 700;
     cursor: pointer;
+    box-shadow: 0 10px 22px rgba(0, 122, 90, .22);
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.button:hover {
+    transform: translateY(-1px);
+    filter: saturate(1.08);
+    box-shadow: 0 14px 28px rgba(0, 122, 90, .28);
 }
 
 .button.secondary {
-    background: var(--navy);
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue-dark) 100%);
+    box-shadow: 0 10px 22px rgba(19, 34, 56, .22);
 }
 
 .button.small {
@@ -98,7 +124,8 @@ nav {
     grid-template-columns: minmax(0, 1fr) 330px;
     gap: 24px;
     align-items: end;
-    padding: 44px 0 28px;
+    align-items: stretch;
+    padding: 46px 0 30px;
 }
 
 .hero h1,
@@ -111,6 +138,20 @@ nav {
     letter-spacing: 0;
 }
 
+.hero > div:first-child,
+.page-title {
+    position: relative;
+}
+
+.hero > div:first-child {
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, .74);
+    border-radius: 8px;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, .82) 0%, rgba(227, 247, 239, .58) 100%);
+    box-shadow: var(--shadow-soft);
+}
+
 .hero-actions {
     display: flex;
     gap: 12px;
@@ -120,17 +161,18 @@ nav {
 .dashboard-brief {
     width: min(320px, 100%);
     padding: 24px;
-    border: 1px solid rgba(0, 122, 90, .20);
+    border: 1px solid rgba(255, 255, 255, .70);
     border-radius: 8px;
     background:
-        linear-gradient(145deg, rgba(255, 255, 255, .92) 0%, rgba(227, 247, 239, .94) 100%),
+        linear-gradient(145deg, rgba(0, 77, 58, .98) 0%, rgba(0, 122, 90, .94) 58%, rgba(216, 155, 37, .86) 100%),
         var(--panel);
-    box-shadow: 0 18px 45px rgba(16, 24, 40, .08);
+    box-shadow: var(--shadow);
+    color: #fff;
 }
 
 .dashboard-brief span {
     display: block;
-    color: var(--muted);
+    color: rgba(255, 255, 255, .72);
     font-weight: 700;
 }
 
@@ -143,7 +185,7 @@ nav {
 
 .dashboard-brief p {
     margin: 12px 0 0;
-    color: var(--muted);
+    color: rgba(255, 255, 255, .78);
 }
 
 .hero-actions.stacked {
@@ -152,7 +194,7 @@ nav {
 
 .eyebrow {
     margin: 0 0 8px;
-    color: var(--gold);
+    color: #b87512;
     font-size: .78rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -181,14 +223,15 @@ nav {
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: 8px;
-    box-shadow: 0 14px 40px rgba(20, 32, 51, .06);
+    box-shadow: var(--shadow-soft);
 }
 
 .metrics article {
-    padding: 18px;
+    padding: 20px;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .98) 0%, rgba(248, 252, 250, .98) 100%);
 }
 
 .metrics article::after {
@@ -209,7 +252,8 @@ nav {
 .metrics strong {
     display: block;
     margin-top: 8px;
-    font-size: 1.45rem;
+    font-size: 1.5rem;
+    color: var(--navy);
 }
 
 .section-head {
@@ -233,6 +277,14 @@ nav {
     padding: 24px;
     position: relative;
     overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.market-card:hover,
+.action-card:hover,
+.region-grid article:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
 }
 
 .market-card::before {
@@ -247,15 +299,21 @@ nav {
 }
 
 .market-card.green {
-    background: linear-gradient(145deg, #ffffff 0%, var(--teal-soft) 100%);
+    border-color: rgba(0, 122, 90, .18);
+    background:
+        linear-gradient(145deg, #ffffff 0%, var(--teal-soft) 100%);
 }
 
 .market-card.gold {
-    background: linear-gradient(145deg, #ffffff 0%, var(--gold-soft) 100%);
+    border-color: rgba(216, 155, 37, .22);
+    background:
+        linear-gradient(145deg, #ffffff 0%, var(--gold-soft) 100%);
 }
 
 .market-card.blue {
-    background: linear-gradient(145deg, #ffffff 0%, var(--blue-soft) 100%);
+    border-color: rgba(40, 87, 200, .20);
+    background:
+        linear-gradient(145deg, #ffffff 0%, var(--blue-soft) 100%);
 }
 
 .market-card.green::before {
@@ -282,6 +340,7 @@ nav {
     margin-top: 16px;
     max-width: 360px;
     font-size: 1.3rem;
+    line-height: 1.2;
 }
 
 .market-card p {
@@ -300,13 +359,14 @@ nav {
     gap: 22px;
     align-items: stretch;
     margin-top: 18px;
-    padding: 26px;
-    border: 1px solid rgba(19, 34, 56, .08);
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, .16);
     border-radius: 8px;
     background:
-        linear-gradient(135deg, rgba(19, 34, 56, .96) 0%, rgba(0, 77, 58, .94) 100%);
+        radial-gradient(circle at 100% 0%, rgba(216, 155, 37, .30), transparent 18rem),
+        linear-gradient(135deg, rgba(19, 34, 56, .98) 0%, rgba(0, 77, 58, .96) 100%);
     color: #fff;
-    box-shadow: 0 18px 45px rgba(16, 24, 40, .12);
+    box-shadow: 0 24px 56px rgba(16, 24, 40, .18);
 }
 
 .funding-panel .eyebrow {
@@ -334,7 +394,13 @@ nav {
     padding: 16px;
     border: 1px solid rgba(255, 255, 255, .16);
     border-radius: 8px;
-    background: rgba(255, 255, 255, .08);
+    background: rgba(255, 255, 255, .09);
+    backdrop-filter: blur(10px);
+    transition: transform .18s ease, background .18s ease;
+}
+
+.region-grid article:hover {
+    background: rgba(255, 255, 255, .14);
 }
 
 .region-grid strong {
@@ -354,8 +420,9 @@ nav {
     padding: 20px;
     border: 1px solid rgba(0, 122, 90, .22);
     border-radius: 8px;
-    background: linear-gradient(145deg, #ffffff 0%, #eaf8f3 100%);
-    box-shadow: 0 14px 40px rgba(20, 32, 51, .06);
+    background:
+        linear-gradient(145deg, #ffffff 0%, #eaf8f3 100%);
+    box-shadow: var(--shadow-soft);
 }
 
 .approval-note span {
@@ -382,13 +449,15 @@ nav {
     gap: 8px;
     padding: 20px;
     color: var(--ink);
+    background:
+        linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
     transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
 
 .action-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(8, 127, 91, .35);
-    box-shadow: 0 20px 46px rgba(16, 24, 40, .10);
+    border-color: rgba(0, 122, 90, .35);
+    box-shadow: var(--shadow);
 }
 
 .action-card strong {
@@ -452,10 +521,11 @@ h3 {
 .strategy-panel,
 .empty-state,
 .active-trade-card {
-    background: var(--panel);
+    background:
+        linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
     border: 1px solid var(--line);
     border-radius: 8px;
-    box-shadow: 0 14px 40px rgba(20, 32, 51, .06);
+    box-shadow: var(--shadow-soft);
 }
 
 .balance-card {
@@ -503,7 +573,7 @@ h3 {
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 12px;
-    background: #fbfcfe;
+    background: linear-gradient(180deg, #ffffff 0%, #f7fbfa 100%);
 }
 
 .strategy-list span,
@@ -524,7 +594,7 @@ h3 {
 .tip-box {
     padding: 14px;
     border-left: 4px solid var(--gold);
-    background: #fff8eb;
+    background: linear-gradient(135deg, #fff8eb 0%, #ffffff 100%);
     border-radius: 8px;
 }
 
@@ -586,6 +656,7 @@ h3 {
 
 .invest-plan.ready {
     border-color: #b9ddcf;
+    box-shadow: 0 16px 34px rgba(0, 122, 90, .10);
 }
 
 .plan-return {
@@ -625,14 +696,14 @@ h3 {
     padding: 0 14px;
     border: 1px solid var(--line);
     border-radius: 8px;
-    background: var(--panel);
+    background: rgba(255, 255, 255, .86);
     color: var(--ink);
     font-weight: 700;
 }
 
 .filter-bar a.active {
     border-color: var(--primary);
-    background: #e8f5ef;
+    background: linear-gradient(135deg, #e8f5ef 0%, #ffffff 100%);
     color: var(--primary-dark);
 }
 
@@ -692,10 +763,14 @@ dd {
 
 .split article {
     padding: 22px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .98) 0%, rgba(250, 253, 252, .98) 100%);
 }
 
 .table-wrap {
     overflow-x: auto;
+    background:
+        linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%);
 }
 
 table {
@@ -712,9 +787,14 @@ td {
 }
 
 th {
-    color: var(--muted);
+    color: #526071;
     font-size: .78rem;
     text-transform: uppercase;
+    background: #f7faf9;
+}
+
+tbody tr:hover {
+    background: #f8fcfb;
 }
 
 .activity-list {
@@ -728,6 +808,13 @@ th {
     gap: 12px;
     padding: 12px 0;
     border-bottom: 1px solid var(--line);
+    border-radius: 8px;
+    transition: background .18s ease, padding .18s ease;
+}
+
+.activity-list div:hover {
+    padding-inline: 10px;
+    background: #f7fbfa;
 }
 
 .activity-list span {
@@ -788,6 +875,14 @@ select {
     padding: 0 12px;
     background: #fff;
     color: var(--ink);
+    transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(0, 122, 90, .12);
 }
 
 .helptext,
@@ -815,7 +910,7 @@ ul.errorlist {
 .message {
     padding: 12px 14px;
     border-radius: 8px;
-    background: #e8f5ef;
+    background: linear-gradient(135deg, #e8f5ef 0%, #ffffff 100%);
     color: var(--primary-dark);
     border: 1px solid #b9ddcf;
 }
