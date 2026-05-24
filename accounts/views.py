@@ -99,5 +99,10 @@ def dashboard(request):
         },
         "deposit_form": DepositForm(initial={"phone": request.user.phone}),
         "withdraw_form": WithdrawalForm(initial={"phone": request.user.phone}),
+        "has_pending_deposit": Transaction.objects.filter(
+            user=request.user, 
+            transaction_type=Transaction.Type.DEPOSIT, 
+            status=Transaction.Status.PENDING
+        ).exists(),
     }
     return render(request, "dashboard/index.html", context)

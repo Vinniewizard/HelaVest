@@ -5,10 +5,6 @@
     <div>
         <p class="eyebrow">Professional Terminal</p>
         <p class="hero-copy" style="max-width: 600px;">Manage your capital, explore strategic investment plans, and monitor your affiliate network growth from a unified workspace.</p>
-        <div class="hero-actions">
-            <button class="button" onclick="switchTab('cashier')">Lipa na M-Pesa</button>
-            <button class="button secondary" onclick="switchTab('terminal')">Open Market Desk</button>
-        </div>
         <div class="dashboard-tabs">
             <button class="tab-btn active" data-tab="terminal">Terminal</button>
             <button class="tab-btn" data-tab="cashier">Cashier</button>
@@ -16,11 +12,6 @@
             <button class="tab-btn" data-tab="history">History</button>
         </div>
     </div>
-    <aside class="dashboard-brief" style="background: linear-gradient(145deg, var(--navy) 0%, #004d3a 100%);">
-        <span>Network Access Code</span>
-        <strong>{{ user.referral_code }}</strong>
-        <p style="font-size: 0.85rem; opacity: 0.8;">Verified members build commission income from network investment activity.</p>
-    </aside>
 </section>
 
 {% include "dashboard/sections/terminal.html" %}

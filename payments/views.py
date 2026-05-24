@@ -15,12 +15,23 @@ def transactions(request):
 def deposit(request):
     form = DepositForm(request.POST or None, initial={"phone": request.user.phone})
     if request.method == "POST" and form.is_valid():
+        # Check for existing pending deposits
+        pending_exists = Transaction.objects.filter(
+            user=request.user, 
+            transaction_type=Transaction.Type.DEPOSIT, 
+            status=Transaction.Status.PENDING
+        ).exists()
+        
+        if pending_exists:
+            messages.error(request, "You already have a pending deposit request. Please wait for it to be approved before submitting another one.")
+            return redirect("dashboard")
+            
         deposit_txn = form.save(commit=False)
         deposit_txn.user = request.user
         deposit_txn.transaction_type = Transaction.Type.DEPOSIT
-        deposit_txn.status = Transaction.Status.APPROVED
+        deposit_txn.status = Transaction.Status.PENDING
         deposit_txn.save()
-        messages.success(request, "Deposit recorded and added to your available balance.")
+        messages.success(request, "Deposit request submitted. Funds will reflect in your wallet once verified and approved by the administrator.")
         return redirect("dashboard")
     return render(request, "payments/deposit.html", {"form": form})
 
