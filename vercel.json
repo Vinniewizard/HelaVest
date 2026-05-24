@@ -12,6 +12,14 @@
   ],
   "routes": [
     {
+      "src": "/admin/(.*)",
+      "dest": "core/wsgi.py"
+    },
+    {
+      "src": "/management-portal/(.*)",
+      "dest": "core/wsgi.py"
+    },
+    {
       "src": "/(.*)",
       "dest": "core/wsgi.py"
     }

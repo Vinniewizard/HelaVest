@@ -126,3 +126,4 @@ BUSINESS_APPROVAL_NOTE = os.environ.get(
     "BUSINESS_APPROVAL_NOTE",
     "Approved business profile. Registration and compliance documents are maintained for secure staff review.",
 )
+APPEND_SLASH = True
