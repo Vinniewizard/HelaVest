@@ -1,0 +1,126 @@
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <a href="{% url 'dashboard' %}" class="brand">HelaVest</a>
+            <p>Professional investment platform for consistent capital growth and secure financial management.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h4>Quick Links</h4>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
+
+        <div class="footer-social">
+            <h4>Join Our Community</h4>
+            <div class="social-icons">
+                <a href="https://chat.whatsapp.com/GebCk8EB9i259AOMQaIpmH" target="_blank" class="social-link whatsapp" title="Join WhatsApp Community">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.449-9.877 9.894-9.877 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.45 9.878-9.892 9.878M19.985 4.017a11.83 11.83 0 00-8.411-3.481c-6.52 0-11.82 5.308-11.82 11.82 0 2.083.542 4.116 1.571 5.92L0 23.992l5.885-1.543a11.801 11.801 0 005.679 1.449h.005c6.518 0 11.821-5.309 11.824-11.823.001-3.153-1.233-6.117-3.408-8.058"/>
+                    </svg>
+                    <span>WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; {% now "Y" %} HelaVest. All rights reserved.</p>
+    </div>
+</footer>
+
+<style>
+    .main-footer {
+        background: var(--navy);
+        color: rgba(255, 255, 255, 0.8);
+        padding: 60px 0 20px;
+        margin-top: 80px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-content {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1.5fr;
+        gap: 40px;
+        padding-bottom: 40px;
+    }
+
+    .footer-brand .brand {
+        color: #fff;
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+        display: inline-block;
+    }
+
+    .footer-brand p {
+        line-height: 1.6;
+        max-width: 400px;
+    }
+
+    .footer-links h4, .footer-social h4 {
+        color: #fff;
+        margin: 0 0 20px;
+        font-size: 1.1rem;
+    }
+
+    .footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.7);
+        transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+        color: var(--primary-light);
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 16px;
+    }
+
+    .social-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        color: #fff;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .social-link.whatsapp:hover {
+        background: #25d366;
+        border-color: #25d366;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    }
+
+    .footer-bottom {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        .footer-content {
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+    }
+</style>
