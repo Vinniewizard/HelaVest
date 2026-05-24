@@ -13,7 +13,8 @@ DEBUG = env_bool("DEBUG", True)
 default_hosts = ["127.0.0.1", "localhost", "testserver"]
 env_hosts = [host.strip() for host in os.environ.get("ALLOWED_HOSTS", "").split(",") if host.strip()]
 render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-ALLOWED_HOSTS = default_hosts + env_hosts + ([render_host] if render_host else [])
+vercel_host = os.environ.get("VERCEL_URL")
+ALLOWED_HOSTS = default_hosts + env_hosts + ([render_host] if render_host else []) + ([vercel_host] if vercel_host else [])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
