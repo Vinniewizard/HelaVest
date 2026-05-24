@@ -125,6 +125,30 @@
             // Check for transactions tab specially if needed or default to terminal
             switchTab('terminal');
         }
+
+        // Countdown Timer Logic
+        function updateCountdowns() {
+            document.querySelectorAll('.countdown').forEach(el => {
+                const target = new Date(el.dataset.matures).getTime();
+                const now = new Date().getTime();
+                const dist = target - now;
+
+                if (dist < 0) {
+                    el.innerHTML = "Matured";
+                    return;
+                }
+
+                const d = Math.floor(dist / (1000 * 60 * 60 * 24));
+                const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((dist % (1000 * 60)) / 1000);
+
+                el.innerHTML = `${d}d ${h}h ${m}m ${s}s left`;
+            });
+        }
+
+        setInterval(updateCountdowns, 1000);
+        updateCountdowns();
     });
 </script>
 {% endblock %}

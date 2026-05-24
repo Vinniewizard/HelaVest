@@ -16,7 +16,7 @@
             <article class="active-trade-card" style="padding: 24px; border-radius: 12px; border: 1px solid var(--line); background: white;">
                 <div class="plan-topline">
                     <span class="badge" style="background: var(--teal-soft); color: var(--primary);">Active Session</span>
-                    <span style="font-size: 0.8rem; color: var(--muted);">Matures {{ trade.matures_at|date:"M d" }}</span>
+                    <span style="font-size: 0.8rem; color: var(--muted);" class="countdown" data-matures="{{ trade.matures_at|date:'c' }}">Calculating...</span>
                 </div>
                 <h3 style="margin: 12px 0; font-size: 1.2rem;">{{ trade.plan.name }}</h3>
                 <div class="progress" style="height: 6px; margin-bottom: 12px;"><span style="width: {{ trade.progress_percent }}%"></span></div>
