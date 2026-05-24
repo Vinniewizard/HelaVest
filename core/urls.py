@@ -7,7 +7,8 @@ from accounts.views import dashboard, logout_view, register
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path(settings.ADMIN_URL, admin.site.urls),
+    path("management-portal/", admin.site.urls),
+    path("admin/", admin.site.urls), # Fallback
     path("", dashboard, name="dashboard"),
     path("register/", register, name="register"),
     path("login/", auth_views.LoginView.as_view(template_name="registration/login.html"), name="login"),
