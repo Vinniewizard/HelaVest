@@ -120,6 +120,8 @@ LOGOUT_REDIRECT_URL = "login"
 ADMIN_URL = os.environ.get("ADMIN_URL", "secure-admin/")
 if not ADMIN_URL.endswith("/"):
     ADMIN_URL = f"{ADMIN_URL}/"
+# Ensure we don't have leading slash in path()
+ADMIN_URL = ADMIN_URL.lstrip("/")
 BUSINESS_APPROVAL_NOTE = os.environ.get(
     "BUSINESS_APPROVAL_NOTE",
     "Approved business profile. Registration and compliance documents are maintained for secure staff review.",
