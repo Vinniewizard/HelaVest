@@ -5,11 +5,12 @@ from django.conf import settings
 from django.db.models import Sum
 from django.shortcuts import redirect, render
 
-from investments.models import Investment
+from investments.models import Investment, Plan
 from investments.services import complete_matured_investments
 from payments.models import Transaction
 from referrals.models import Referral
 
+from payments.forms import DepositForm, WithdrawalForm
 from .forms import RegisterForm
 
 
@@ -87,5 +88,16 @@ def dashboard(request):
         "referral_bonus": totals["referral_bonus"],
         "completed_profit": completed_profit,
         "active_capital": active_trades.aggregate(total=Sum("amount"))["total"] or 0,
+        "plans": Plan.objects.filter(active=True),
+        "invest_stats": {
+            "available_balance": totals["available_balance"],
+            "plan_count": Plan.objects.filter(active=True).count(),
+            "active_count": active_trades.count(),
+            "active_capital": active_trades.aggregate(total=Sum("amount"))["total"] or 0,
+            "expected_active_returns": active_trades.aggregate(total=Sum("return_amount"))["total"] or 0,
+            "completed_profit": completed_profit,
+        },
+        "deposit_form": DepositForm(initial={"phone": request.user.phone}),
+        "withdraw_form": WithdrawalForm(initial={"phone": request.user.phone}),
     }
     return render(request, "dashboard/index.html", context)

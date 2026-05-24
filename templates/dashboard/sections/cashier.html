@@ -1,0 +1,165 @@
+<div id="tab-cashier" class="tab-content">
+    <section class="section-head">
+        <div>
+            <p class="eyebrow">Financial Services</p>
+            <h2>Cashier Desk</h2>
+        </div>
+        <div style="background: var(--bg); padding: 8px 16px; border-radius: 99px; border: 1px solid var(--line); font-weight: 700;">
+            <span style="color: var(--muted); font-size: 0.8rem;">BALANCE:</span>
+            <span style="color: var(--primary-dark); margin-left: 5px;">KSh {{ available_balance|floatformat:0 }}</span>
+        </div>
+    </section>
+
+    <!-- Sub-Toggle Navigation -->
+    <div style="display: flex; gap: 10px; margin-bottom: 30px; background: var(--bg); padding: 6px; border-radius: 12px; width: fit-content;">
+        <button onclick="toggleCashier('deposit')" id="btn-cash-deposit" class="cash-sub-btn active" style="padding: 10px 24px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+            Deposit Funds
+        </button>
+        <button onclick="toggleCashier('withdraw')" id="btn-cash-withdraw" class="cash-sub-btn" style="padding: 10px 24px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; background: none; color: var(--muted);">
+            Withdraw Payout
+        </button>
+    </div>
+
+    <!-- DEPOSIT VIEW -->
+    <div id="cash-deposit-view" class="cash-view active">
+        <div class="split" style="grid-template-columns: 1.1fr 1fr; gap: 30px; align-items: start;">
+            <!-- Instructions Card -->
+            <article style="background: linear-gradient(145deg, var(--navy) 0%, #004d3a 100%); color: white; padding: 30px; border-radius: 16px; box-shadow: var(--shadow);">
+                <div style="margin-bottom: 24px;">
+                    <span class="eyebrow" style="color: #ffd27b;">Payment Method</span>
+                    <h3 style="color: white; font-size: 1.4rem; margin-top: 5px;">M-PESA Paybill Instructions</h3>
+                </div>
+
+                <div style="display: grid; gap: 20px;">
+                    <!-- Paybill -->
+                    <div style="background: rgba(255,255,255,0.06); padding: 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.85rem; opacity: 0.7;">PAYBILL NUMBER</span>
+                            <button onclick="copyToClipboard('542542', this)" style="background: var(--primary); border: none; color: white; font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; cursor: pointer;">Copy</button>
+                        </div>
+                        <strong style="display: block; font-size: 1.6rem; font-family: monospace; color: #ffd27b; margin-top: 8px;">542542</strong>
+                    </div>
+
+                    <!-- Account -->
+                    <div style="background: rgba(255,255,255,0.06); padding: 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.85rem; opacity: 0.7;">ACCOUNT NUMBER</span>
+                            <button onclick="copyToClipboard('01509373416150', this)" style="background: var(--primary); border: none; color: white; font-size: 0.7rem; padding: 4px 10px; border-radius: 4px; cursor: pointer;">Copy</button>
+                        </div>
+                        <strong style="display: block; font-size: 1.4rem; font-family: monospace; color: #ffd27b; margin-top: 8px;">01509373416150</strong>
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; font-size: 0.85rem; line-height: 1.4; opacity: 0.9;">
+                    Once payment is sent, fill in the confirmation form on the right to finalize your transaction.
+                </div>
+            </article>
+
+            <!-- Confirmation Form -->
+            <article style="background: white; border: 1px solid var(--line); border-radius: 16px; padding: 30px;">
+                <h3 style="font-size: 1.2rem; margin-bottom: 8px;">Payment Confirmation</h3>
+                <p class="muted" style="font-size: 0.85rem; margin-bottom: 24px;">Submit transaction details for approval</p>
+
+                <form action="{% url 'deposit' %}" method="post" style="display: grid; gap: 18px;">
+                    {% csrf_token %}
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--muted); margin-bottom: 5px;">AMOUNT PAID (KSh)</label>
+                        <input type="number" name="amount" required placeholder="e.g. 10000" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; font-weight: 700;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--muted); margin-bottom: 5px;">PHONE NUMBER USED</label>
+                        <input type="text" name="phone" value="{{ user.phone }}" required placeholder="07XXXXXXXX" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--muted); margin-bottom: 5px;">M-PESA TRANSACTION CODE</label>
+                        <input type="text" name="note" required placeholder="Paste message or enter ID" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; text-transform: uppercase;">
+                    </div>
+                    <button class="button full" type="submit" style="margin-top: 10px;">Submit for Approval</button>
+                </form>
+            </article>
+        </div>
+    </div>
+
+    <!-- WITHDRAW VIEW -->
+    <div id="cash-withdraw-view" class="cash-view" style="display: none;">
+        <div class="split" style="grid-template-columns: 1fr 1.1fr; gap: 30px; align-items: start;">
+            <!-- Withdrawal Form -->
+            <article style="background: white; border: 1px solid var(--line); border-radius: 16px; padding: 30px;">
+                <h3 style="font-size: 1.2rem; margin-bottom: 8px;">Request Payout</h3>
+                <p class="muted" style="font-size: 0.85rem; margin-bottom: 24px;">Transfer funds from wallet to M-Pesa</p>
+
+                <form action="{% url 'withdraw' %}" method="post" style="display: grid; gap: 18px;">
+                    {% csrf_token %}
+                    <div style="background: var(--bg); padding: 15px; border-radius: 8px; border: 1px dotted var(--line); margin-bottom: 5px;">
+                        <span style="font-size: 0.75rem; color: var(--muted); display: block;">Max withrawable:</span>
+                        <strong style="font-size: 1.2rem;">KSh {{ available_balance|floatformat:0 }}</strong>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--muted); margin-bottom: 5px;">WITHDRAWAL AMOUNT</label>
+                        <input type="number" name="amount" required placeholder="Enter amount" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; font-weight: 700;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--muted); margin-bottom: 5px;">RECIPIENT M-PESA NUMBER</label>
+                        <input type="text" name="phone" value="{{ user.phone }}" required placeholder="07XXXXXXXX" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px;">
+                    </div>
+                    <button class="button secondary full" type="submit" style="margin-top: 10px;">Request Payout</button>
+                </form>
+            </article>
+
+            <!-- Policy Card -->
+            <article style="background: #f8fafc; border: 1px solid var(--line); border-radius: 16px; padding: 30px;">
+                <span class="eyebrow" style="color: var(--primary);">Withdrawal Policy</span>
+                <h3 style="margin-top: 8px; font-size: 1.1rem;">Safe & Fast Transfers</h3>
+                <ul style="list-style: none; padding: 0; margin: 20px 0; display: grid; gap: 15px; font-size: 0.9rem; color: var(--muted);">
+                    <li style="display: flex; gap: 10px;"><span>✔</span> Processing time: 2-15 minutes.</li>
+                    <li style="display: flex; gap: 10px;"><span>✔</span> Automated verification for registered numbers.</li>
+                    <li style="display: flex; gap: 10px;"><span>✔</span> Session security: Only matured profits/capital shown.</li>
+                </ul>
+                <div style="padding: 15px; background: white; border-radius: 8px; border: 1px solid var(--line); font-size: 0.8rem;">
+                    <strong>Notice:</strong> Ensure your M-Pesa account can receive the requested amount to avoid network delays.
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+
+<style>
+    .cash-sub-btn.active {
+        background: white;
+        color: var(--primary-dark);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+</style>
+
+<script>
+    function toggleCashier(mode) {
+        const depositBtn = document.getElementById('btn-cash-deposit');
+        const withdrawBtn = document.getElementById('btn-cash-withdraw');
+        const depositView = document.getElementById('cash-deposit-view');
+        const withdrawView = document.getElementById('cash-withdraw-view');
+
+        if (mode === 'deposit') {
+            depositBtn.classList.add('active');
+            depositBtn.style.background = 'white';
+            depositBtn.style.color = 'var(--primary-dark)';
+            
+            withdrawBtn.classList.remove('active');
+            withdrawBtn.style.background = 'none';
+            withdrawBtn.style.color = 'var(--muted)';
+            
+            depositView.style.display = 'block';
+            withdrawView.style.display = 'none';
+        } else {
+            withdrawBtn.classList.add('active');
+            withdrawBtn.style.background = 'white';
+            withdrawBtn.style.color = 'var(--primary-dark)';
+            
+            depositBtn.classList.remove('active');
+            depositBtn.style.background = 'none';
+            depositBtn.style.color = 'var(--muted)';
+            
+            withdrawView.style.display = 'block';
+            depositView.style.display = 'none';
+        }
+    }
+</script>

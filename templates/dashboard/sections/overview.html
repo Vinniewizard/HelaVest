@@ -1,0 +1,87 @@
+<div id="tab-overview" class="tab-content active">
+    <section class="metrics">
+        <article><span>Available balance</span><strong>KSh {{ available_balance|floatformat:0 }}</strong></article>
+        <article><span>Total deposits</span><strong>KSh {{ total_deposits|floatformat:0 }}</strong></article>
+        <article><span>Active capital</span><strong>KSh {{ active_capital|floatformat:0 }}</strong></article>
+        <article><span>Referral commission</span><strong>KSh {{ referral_bonus|floatformat:0 }}</strong></article>
+        <article><span>Completed profit</span><strong>KSh {{ completed_profit|floatformat:0 }}</strong></article>
+    </section>
+
+    <div class="split">
+        <article>
+            <div class="section-head compact"><h2>Active trades</h2><a href="{% url 'trades' %}">History</a></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Plan</th><th>Capital</th><th>Return</th><th>Matures</th></tr></thead>
+                    <tbody>
+                        {% for trade in active_trades %}
+                            <tr>
+                                <td>{{ trade.plan.name }}</td>
+                                <td>KSh {{ trade.amount }}</td>
+                                <td>KSh {{ trade.return_amount }}</td>
+                                <td>{{ trade.matures_at|date:"M d, Y" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="4">No active trades yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </article>
+        <article>
+            <div class="section-head compact"><h2>Recent transactions</h2><a href="{% url 'transactions' %}">All</a></div>
+            <div class="activity-list">
+                {% for transaction in transactions %}
+                    <div style="padding: 10px 0; border-bottom: 1px solid var(--line);">
+                        <strong>{{ transaction.get_transaction_type_display }}</strong>
+                        <span style="display: block; font-size: 0.9em; color: var(--muted);">KSh {{ transaction.amount }} · {{ transaction.get_status_display }}</span>
+                    </div>
+                {% empty %}
+                    <p>No transactions yet.</p>
+                {% endfor %}
+            </div>
+        </article>
+    </div>
+
+    <section class="section-head">
+        <div>
+            <p class="eyebrow">Market pulse</p>
+            <h2>Trending insights</h2>
+        </div>
+    </section>
+    <section class="market-grid">
+        {% for update in market_updates %}
+            <article class="market-card {{ update.tone }}">
+                <span>{{ update.label }}</span>
+                <h3>{{ update.title }}</h3>
+                <p>{{ update.summary }}</p>
+            </article>
+        {% endfor %}
+    </section>
+
+    <section class="funding-panel">
+        <div>
+            <p class="eyebrow">Funding reach</p>
+            <h2>Trusted lender markets</h2>
+            <p>HelaVest is positioned for a global funding audience, presenting a clean experience for users who expect clarity across wallet, trading, referral, and withdrawal activity.</p>
+        </div>
+        <div class="region-grid">
+            {% for region in funding_regions %}
+                <article>
+                    <strong>{{ region.country }}</strong>
+                    <span>{{ region.label }}</span>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="action-strip">
+        {% for action in quick_actions %}
+            <a href="{% url action.url %}" class="action-card">
+                <span>0{{ forloop.counter }}</span>
+                <strong>{{ action.title }}</strong>
+                <p>{{ action.body }}</p>
+            </a>
+        {% endfor %}
+    </section>
+</div>

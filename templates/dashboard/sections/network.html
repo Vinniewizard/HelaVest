@@ -1,0 +1,75 @@
+<div id="tab-network" class="tab-content">
+    <!-- Active Portfolio -->
+    <section class="section-head">
+        <div>
+            <p class="eyebrow">Portfolio Status</p>
+            <h2>Active Trading Sessions</h2>
+        </div>
+        <div style="background: var(--blue-soft); padding: 6px 14px; border-radius: 99px; font-size: 0.85rem; font-weight: 700; color: var(--blue); border: 1px solid rgba(40, 87, 200, 0.1);">
+            Capital: KSh {{ active_capital|floatformat:0 }}
+        </div>
+    </section>
+
+    {% if active_trades %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 30px;">
+        {% for trade in active_trades %}
+            <article class="active-trade-card" style="padding: 24px; border-radius: 12px; border: 1px solid var(--line); background: white;">
+                <div class="plan-topline">
+                    <span class="badge" style="background: var(--teal-soft); color: var(--primary);">Active Session</span>
+                    <span style="font-size: 0.8rem; color: var(--muted);">Matures {{ trade.matures_at|date:"M d" }}</span>
+                </div>
+                <h3 style="margin: 12px 0; font-size: 1.2rem;">{{ trade.plan.name }}</h3>
+                <div class="progress" style="height: 6px; margin-bottom: 12px;"><span style="width: {{ trade.progress_percent }}%"></span></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                    <div><span class="muted">Capital:</span> <strong>KSh {{ trade.amount }}</strong></div>
+                    <div style="text-align: right;"><span class="muted">Payout:</span> <strong style="color: var(--primary);">KSh {{ trade.return_amount }}</strong></div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="background: white; border: 1px solid var(--line); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 30px;">
+        <p class="muted">No active sessions found. Start a plan from the <strong style="color: var(--primary); cursor: pointer;" onclick="switchTab('terminal')">Terminal</strong>.</p>
+    </div>
+    {% endif %}
+
+    <!-- Referral Network -->
+    <section class="section-head">
+        <div>
+            <p class="eyebrow">Affiliate Network</p>
+            <h2>Referral Earnings</h2>
+        </div>
+    </section>
+
+    <div class="split" style="grid-template-columns: 1fr 1.3fr; gap: 24px;">
+        <!-- Referral Code Card -->
+        <article style="background: linear-gradient(135deg, var(--navy) 0%, var(--primary-dark) 100%); color: white; padding: 30px; border-radius: 12px;">
+            <span class="eyebrow" style="color: #ffd27b; font-size: 0.7rem;">Your Network Code</span>
+            <strong style="display: block; font-size: 1.8rem; margin: 10px 0; letter-spacing: 0.1em; color: white;">{{ user.referral_code }}</strong>
+            <p style="font-size: 0.85rem; opacity: 0.8; line-height: 1.5;">Commission is earned when members you invite start qualifying investment sessions.</p>
+            <div style="margin-top: 20px;">
+                <button onclick="copyToClipboard('{{ request.get_host }}/register/?ref={{ user.referral_code }}', this)" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 700; width: 100%;">Copy Invitation Link</button>
+            </div>
+        </article>
+
+        <!-- Earnings Log -->
+        <article style="background: white; border: 1px solid var(--line); border-radius: 12px; padding: 24px;">
+            <h3 style="font-size: 1rem; margin-bottom: 15px;">Recent Network Commissions</h3>
+            <div class="table-wrap" style="box-shadow: none; border: none;">
+                <table>
+                    <thead><tr><th>User</th><th style="text-align: right;">Bonus</th></tr></thead>
+                    <tbody>
+                        {% for referral in referrals %}
+                            <tr>
+                                <td>{{ referral.referred_user.username }}</td>
+                                <td style="text-align: right; color: var(--primary); font-weight: 700;">+ KSh {{ referral.bonus }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="2" class="muted">No network commission recorded yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    </div>
+</div>

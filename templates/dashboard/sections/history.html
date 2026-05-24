@@ -1,0 +1,27 @@
+<div id="tab-history" class="tab-content">
+    <section class="section-head">
+        <div>
+            <p class="eyebrow">Financial records</p>
+            <h2>Transaction history</h2>
+        </div>
+    </section>
+
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Type</th><th>Amount</th><th>Status</th><th>Note</th><th>Date</th></tr></thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td><strong>{{ transaction.get_transaction_type_display }}</strong></td>
+                        <td>KSh {{ transaction.amount }}</td>
+                        <td><span class="status-pill {{ transaction.status }}">{{ transaction.get_status_display }}</span></td>
+                        <td>{{ transaction.note }}</td>
+                        <td>{{ transaction.created_at|date:"M d, Y" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5">No transactions yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

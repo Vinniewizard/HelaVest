@@ -1,0 +1,64 @@
+<div id="tab-invest" class="tab-content">
+    <section class="section-head">
+        <div>
+            <p class="eyebrow">Trading session</p>
+            <h2>Available investment plans</h2>
+            <p class="muted">Fund your account first, choose a plan, then track the maturity date.</p>
+        </div>
+    </section>
+
+    <div class="invest-layout" style="display: grid; grid-template-columns: 300px 1fr; gap: 24px;">
+        <aside class="strategy-panel" style="position: static;">
+            <div>
+                <p class="eyebrow">Balance</p>
+                <strong>KSh {{ available_balance|floatformat:0 }}</strong>
+            </div>
+            <div class="strategy-list">
+                <div><span>Available plans</span><strong>{{ invest_stats.plan_count }}</strong></div>
+                <div><span>Active trades</span><strong>{{ invest_stats.active_count }}</strong></div>
+            </div>
+            <div class="tip-box">
+                <strong>Quick rule</strong>
+                <p>Track your maturity date from the Portfolio tab after starting a session.</p>
+            </div>
+        </aside>
+
+        <section class="plan-grid enhanced" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+            {% for plan in plans %}
+                <article class="plan-card invest-plan {% if available_balance >= plan.amount %}ready{% else %}locked{% endif %}">
+                    <div class="plan-topline">
+                        <span class="badge">{% if available_balance >= plan.amount %}Ready{% else %}Needs deposit{% endif %}</span>
+                        <span>{{ plan.duration_days }} days</span>
+                    </div>
+                    <div>
+                        <h3>{{ plan.name }}</h3>
+                        <p>{{ plan.description }}</p>
+                    </div>
+                    <dl>
+                        <div><dt>Amount</dt><dd>KSh {{ plan.amount }}</dd></div>
+                        <div><dt>Payout</dt><dd>KSh {{ plan.return_amount }}</dd></div>
+                        <div><dt>ROI</dt><dd>{{ plan.roi_percent }}%</dd></div>
+                    </dl>
+                    <div class="plan-return">
+                        <span>Projected profit</span>
+                        <strong>KSh {{ plan.profit }}</strong>
+                    </div>
+                    <form action="{% url 'invest' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan" value="{{ plan.id }}">
+                        {% if available_balance >= plan.amount %}
+                            <button class="button full" type="submit">Start this plan</button>
+                        {% else %}
+                            <a class="button secondary full" href="{% url 'deposit' %}">Deposit to unlock</a>
+                        {% endif %}
+                    </form>
+                </article>
+            {% empty %}
+                <article class="empty-state">
+                    <h3>No plans available</h3>
+                    <p>Ask an administrator to activate investment plans.</p>
+                </article>
+            {% endfor %}
+        </section>
+    </div>
+</div>

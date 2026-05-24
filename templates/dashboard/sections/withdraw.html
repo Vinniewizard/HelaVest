@@ -1,0 +1,50 @@
+<div id="tab-withdraw" class="tab-content">
+    <section class="section-head">
+        <div>
+            <p class="eyebrow">Payout desk</p>
+            <h2>Withdraw from Wallet</h2>
+        </div>
+    </section>
+
+    <section class="split" style="grid-template-columns: 1.2fr 1fr; gap: 40px; margin-top: 10px;">
+        <article>
+            <div class="auth-panel" style="padding: 30px; background: white; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                <p class="eyebrow">Transaction details</p>
+                <h2 style="margin-bottom: 20px;">Request Payout</h2>
+                
+                <form action="{% url 'withdraw' %}" method="post" class="form-card" style="display: grid; gap: 15px;">
+                    {% csrf_token %}
+                    <div class="balance-indicator" style="background: var(--bg); padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+                        <span style="display: block; font-size: 0.75rem; color: var(--muted); font-weight: 700; text-transform: uppercase;">Available for withdrawal</span>
+                        <strong style="font-size: 1.3rem; color: var(--primary-dark);">KSh {{ available_balance|floatformat:0 }}</strong>
+                    </div>
+                    <div class="field-group">
+                        <label style="display: block; font-weight: 700; margin-bottom: 5px;">Withdrawal Amount (KSh)</label>
+                        <input type="number" name="amount" required style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px;" placeholder="Enter amount">
+                    </div>
+                    <div class="field-group">
+                        <label style="display: block; font-weight: 700; margin-bottom: 5px;">M-Pesa Number for Payout</label>
+                        <input type="text" name="phone" value="{{ withdraw_form.phone.value|default:'' }}" required style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px;">
+                    </div>
+                    <div class="field-group">
+                        <label style="display: block; font-weight: 700; margin-bottom: 5px;">Notes</label>
+                        <textarea name="note" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; min-height: 60px;" placeholder="Optional info"></textarea>
+                    </div>
+                    <button class="button full" type="submit">Submit withdrawal request</button>
+                </form>
+            </div>
+        </article>
+
+        <article class="payout-policy" style="background: linear-gradient(145deg, #132238 0%, #172b75 100%); color: white; padding: 25px; border-radius: 12px; box-shadow: var(--shadow);">
+            <div style="margin-bottom: 20px;">
+                <p class="eyebrow" style="color: #ffe4a3;">Payout Policy</p>
+                <h2 style="color: white; margin-bottom: 5px; font-size: 1.4rem;">Fast & Secure Withdrawals</h2>
+            </div>
+            <div class="policy-list" style="display: grid; gap: 15px; font-size: 0.9rem;">
+                <div style="display: flex; gap: 10px; align-items: start;"><span style="color: #ffe4a3;">✔</span><span>Processed within 2-6 business hours.</span></div>
+                <div style="display: flex; gap: 10px; align-items: start;"><span style="color: #ffe4a3;">✔</span><span>Ensure number is registered on M-Pesa.</span></div>
+                <div style="display: flex; gap: 10px; align-items: start;"><span style="color: #ffe4a3;">✔</span><span>Capital safety: Active sessions must mature.</span></div>
+            </div>
+        </article>
+    </section>
+</div>

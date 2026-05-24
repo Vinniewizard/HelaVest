@@ -1,0 +1,70 @@
+<div id="tab-deposit" class="tab-content">
+    <section class="section-head">
+        <div>
+            <p class="eyebrow">Fund account</p>
+            <h2>Secure Wallet Funding</h2>
+        </div>
+    </section>
+
+    <section class="split" style="grid-template-columns: 1fr 1.2fr; gap: 40px; margin-top: 10px;">
+        <!-- LEFT: Instructions Card -->
+        <article class="payment-instructions" style="background: linear-gradient(145deg, #132238 0%, #004d3a 100%); color: white; padding: 30px; border-radius: 12px; box-shadow: var(--shadow);">
+            <div style="margin-bottom: 30px;">
+                <p class="eyebrow" style="color: #ffd27b;">Payment Method</p>
+                <h2 style="color: white; margin-bottom: 10px;">Lipa na M-PESA Paybill</h2>
+                <p style="opacity: 0.8;">Fund your wallet instantly.</p>
+            </div>
+
+            <div class="steps-list" style="display: grid; gap: 15px;">
+                <div style="display: flex; gap: 10px; align-items: start; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                    <div style="flex: 1;">
+                        <strong>Paybill Number</strong>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px;">
+                            <span style="font-family: monospace; font-size: 1.2rem; font-weight: 800; color: #ffd27b;">542542</span>
+                            <button onclick="copyToClipboard('542542', this)" style="background: rgba(255,255,255,0.1); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; align-items: start; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                    <div style="flex: 1;">
+                        <strong>Account Number</strong>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px;">
+                            <span style="font-family: monospace; font-size: 1.1rem; font-weight: 800; color: #ffd27b;">01509373416150</span>
+                            <button onclick="copyToClipboard('01509373416150', this)" style="background: rgba(255,255,255,0.1); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="font-size: 0.8rem; opacity: 0.6; font-style: italic;">Note: Enter the transaction ID on the right once payment is complete.</p>
+            </div>
+        </article>
+
+        <!-- RIGHT: Confirmation Form -->
+        <article>
+            <div class="auth-panel" style="padding: 30px; background: white; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                <p class="eyebrow">Verification step</p>
+                <h2 style="margin-bottom: 20px;">Confirm Payment</h2>
+                
+                <form action="{% url 'deposit' %}" method="post" class="form-card" style="display: grid; gap: 15px;">
+                    {% csrf_token %}
+                    <div class="field-group">
+                        <label style="display: block; font-weight: 700; margin-bottom: 5px;">Amount Deposited (KSh)</label>
+                        <input type="number" name="amount" required style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px;" placeholder="e.g. 5000">
+                    </div>
+                    <div class="field-group">
+                        <label style="display: block; font-weight: 700; margin-bottom: 5px;">M-Pesa Phone Number</label>
+                        <input type="text" name="phone" value="{{ deposit_form.phone.value|default:'' }}" required style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px;">
+                    </div>
+                    <div class="field-group">
+                        <label style="display: block; font-weight: 700; margin-bottom: 5px;">M-Pesa Transaction Code</label>
+                        <input type="text" name="note" required style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; text-transform: uppercase;" placeholder="SCR1234567">
+                    </div>
+                    <button class="button full" type="submit">Record deposit</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</div>

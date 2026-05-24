@@ -1,145 +1,139 @@
 {% extends "base.html" %}
 {% block title %}Dashboard | HelaVest{% endblock %}
 {% block content %}
-<section class="hero">
+<section class="hero" style="padding: 40px 0 20px;">
     <div>
-        <p class="eyebrow">Global lending dashboard</p>
-        <h1>Capital access, portfolio control, and lender-grade transparency.</h1>
-        <p class="hero-copy">Track funding, active trades, referral earnings, withdrawals, and global lending signals from a calm professional workspace.</p>
+        <p class="eyebrow">Professional Terminal</p>
+        <p class="hero-copy" style="max-width: 600px;">Manage your capital, explore strategic investment plans, and monitor your affiliate network growth from a unified workspace.</p>
         <div class="hero-actions">
-            <a class="button" href="{% url 'deposit' %}">Fund wallet</a>
-            <a class="button secondary" href="{% url 'invest' %}">Open invest desk</a>
+            <button class="button" onclick="switchTab('cashier')">Lipa na M-Pesa</button>
+            <button class="button secondary" onclick="switchTab('terminal')">Open Market Desk</button>
+        </div>
+        <div class="dashboard-tabs">
+            <button class="tab-btn active" data-tab="terminal">Terminal</button>
+            <button class="tab-btn" data-tab="cashier">Cashier</button>
+            <button class="tab-btn" data-tab="network">Network</button>
+            <button class="tab-btn" data-tab="history">History</button>
         </div>
     </div>
-    <aside class="dashboard-brief">
-        <span>Verified member code</span>
+    <aside class="dashboard-brief" style="background: linear-gradient(145deg, var(--navy) 0%, #004d3a 100%);">
+        <span>Network Access Code</span>
         <strong>{{ user.referral_code }}</strong>
-        <p>Invite trusted members and build commission income from qualifying investment activity.</p>
+        <p style="font-size: 0.85rem; opacity: 0.8;">Verified members build commission income from network investment activity.</p>
     </aside>
 </section>
 
-<section class="metrics">
-    <article><span>Available balance</span><strong>KSh {{ available_balance|floatformat:0 }}</strong></article>
-    <article><span>Total deposits</span><strong>KSh {{ total_deposits|floatformat:0 }}</strong></article>
-    <article><span>Active capital</span><strong>KSh {{ active_capital|floatformat:0 }}</strong></article>
-    <article><span>Referral commission</span><strong>KSh {{ referral_bonus|floatformat:0 }}</strong></article>
-    <article><span>Completed profit</span><strong>KSh {{ completed_profit|floatformat:0 }}</strong></article>
-</section>
+{% include "dashboard/sections/terminal.html" %}
+{% include "dashboard/sections/cashier.html" %}
+{% include "dashboard/sections/network.html" %}
+{% include "dashboard/sections/history.html" %}
 
-<section class="section-head">
+<section class="approval-note" style="margin-top: 40px;">
     <div>
-        <p class="eyebrow">Market pulse</p>
-        <h2>Trending insights</h2>
+        <span>Platform Security</span>
+        <strong>Institutional Grade Wallet Protection</strong>
     </div>
-    <a href="{% url 'invest' %}">Open invest desk</a>
-</section>
-<section class="market-grid">
-    {% for update in market_updates %}
-        <article class="market-card {{ update.tone }}">
-            <span>{{ update.label }}</span>
-            <h3>{{ update.title }}</h3>
-            <p>{{ update.summary }}</p>
-        </article>
-    {% endfor %}
+    <p>Automated session management and secured back-office auditing protect all transactions and capital records.</p>
 </section>
 
-<section class="funding-panel">
-    <div>
-        <p class="eyebrow">Funding reach</p>
-        <h2>Trusted lender markets</h2>
-        <p>HelaVest is positioned for a global funding audience, presenting a clean experience for users who expect clarity across wallet, trading, referral, and withdrawal activity.</p>
-    </div>
-    <div class="region-grid">
-        {% for region in funding_regions %}
-            <article>
-                <strong>{{ region.country }}</strong>
-                <span>{{ region.label }}</span>
-            </article>
-        {% endfor %}
-    </div>
-</section>
+<style>
+    .dashboard-tabs {
+        display: flex;
+        gap: 8px;
+        margin-top: 24px;
+        border-bottom: 2px solid var(--line);
+        padding-bottom: 1px;
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .dashboard-tabs::-webkit-scrollbar { display: none; }
+    
+    .tab-btn {
+        padding: 12px 24px;
+        font-weight: 700;
+        color: var(--muted);
+        background: none;
+        border: none;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all .2s;
+        white-space: nowrap;
+    }
+    .tab-btn:hover {
+        color: var(--primary);
+    }
+    .tab-btn.active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+    }
+    .tab-content {
+        display: none;
+        animation: fadeIn .35s ease-out;
+        margin-top: 24px;
+    }
+    .tab-content.active {
+        display: block;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-<section class="action-strip">
-    {% for action in quick_actions %}
-        <a href="{% url action.url %}" class="action-card">
-            <span>0{{ forloop.counter }}</span>
-            <strong>{{ action.title }}</strong>
-            <p>{{ action.body }}</p>
-        </a>
-    {% endfor %}
-</section>
+    /* Override table wrap for cleaner look inside tabs */
+    .table-wrap {
+        border-radius: 8px;
+        border-color: var(--line) !important;
+    }
+</style>
 
-<section class="split">
-    <article>
-        <div class="section-head compact"><h2>Active trades</h2><a href="{% url 'trades' %}">History</a></div>
-        <div class="table-wrap">
-            <table>
-                <thead><tr><th>Plan</th><th>Capital</th><th>Return</th><th>Matures</th></tr></thead>
-                <tbody>
-                    {% for trade in active_trades %}
-                        <tr>
-                            <td>{{ trade.plan.name }}</td>
-                            <td>KSh {{ trade.amount }}</td>
-                            <td>KSh {{ trade.return_amount }}</td>
-                            <td>{{ trade.matures_at|date:"M d, Y" }}</td>
-                        </tr>
-                    {% empty %}
-                        <tr><td colspan="4">No active trades yet.</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </article>
-    <article>
-        <div class="section-head compact"><h2>Recent transactions</h2><a href="{% url 'transactions' %}">All</a></div>
-        <div class="activity-list">
-            {% for transaction in transactions %}
-                <div>
-                    <strong>{{ transaction.get_transaction_type_display }}</strong>
-                    <span>KSh {{ transaction.amount }} · {{ transaction.get_status_display }}</span>
-                </div>
-            {% empty %}
-                <p>No transactions yet.</p>
-            {% endfor %}
-        </div>
-    </article>
-</section>
+<script>
+    function switchTab(tabId) {
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+        
+        const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
+        const activeContent = document.getElementById('tab-' + tabId);
+        
+        if (activeTab) activeTab.classList.add('active');
+        if (activeContent) activeContent.classList.add('active');
+        
+        if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        window.location.hash = tabId;
+    }
 
-<section class="split">
-    <article>
-        <div class="section-head compact"><h2>Invite earnings</h2></div>
-        <p class="muted">Share your code <strong>{{ user.referral_code }}</strong>. You earn commission when invited users invest.</p>
-        <div class="activity-list">
-            {% for referral in referrals %}
-                <div>
-                    <strong>{{ referral.referred_user.username }}</strong>
-                    <span>KSh {{ referral.bonus }} commission</span>
-                </div>
-            {% empty %}
-                <p>No referral commissions yet.</p>
-            {% endfor %}
-        </div>
-    </article>
-    <article>
-        <div class="section-head compact"><h2>Completed trades</h2></div>
-        <div class="activity-list">
-            {% for trade in trade_history %}
-                <div>
-                    <strong>{{ trade.plan.name }}</strong>
-                    <span>KSh {{ trade.return_amount }} · {{ trade.get_status_display }}</span>
-                </div>
-            {% empty %}
-                <p>No completed trades yet.</p>
-            {% endfor %}
-        </div>
-    </article>
-</section>
+    function copyToClipboard(text, btn) {
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btn.innerText;
+            btn.innerText = 'Copied!';
+            if (btn.classList.contains('button')) {
+                btn.style.background = 'var(--primary)';
+            }
+            setTimeout(() => {
+                btn.innerText = originalText;
+                if (btn.classList.contains('button')) {
+                    btn.style.background = '';
+                }
+            }, 2000);
+        });
+    }
 
-<section class="approval-note">
-    <div>
-        <span>Business endnote</span>
-        <strong>{{ business_approval_note }}</strong>
-    </div>
-    <p>Staff-only controls manage records, transactions, plans, referrals, and withdrawal reviews through a secured back office.</p>
-</section>
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+        });
+
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+            switchTab(hash);
+        } else {
+            // Check for transactions tab specially if needed or default to terminal
+            switchTab('terminal');
+        }
+    });
+</script>
 {% endblock %}

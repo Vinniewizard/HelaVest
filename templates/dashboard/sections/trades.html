@@ -1,0 +1,47 @@
+<div id="tab-portfolio" class="tab-content">
+    <section class="section-head">
+        <div>
+            <p class="eyebrow">Portfolio records</p>
+            <h2>Active and historical trades</h2>
+        </div>
+    </section>
+
+    {% if active_trades %}
+    <section class="active-trade-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        {% for trade in active_trades %}
+            <article class="active-trade-card" style="padding: 20px; border: 1px solid var(--line); border-radius: 8px;">
+                <div class="plan-topline">
+                    <span class="badge">Active</span>
+                    <span>Matures {{ trade.matures_at|date:"M d" }}</span>
+                </div>
+                <h3>{{ trade.plan.name }}</h3>
+                <div class="progress" style="margin: 10px 0;"><span style="width: {{ trade.progress_percent }}%"></span></div>
+                <dl>
+                    <div><dt>Capital</dt><dd>KSh {{ trade.amount }}</dd></div>
+                    <div><dt>Return</dt><dd>KSh {{ trade.return_amount }}</dd></div>
+                </dl>
+            </article>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Plan</th><th>Capital</th><th>Return</th><th>Status</th><th>Started</th><th>Matures</th></tr></thead>
+            <tbody>
+                {% for trade in trade_history %}
+                    <tr>
+                        <td>{{ trade.plan.name }}</td>
+                        <td>KSh {{ trade.amount }}</td>
+                        <td>KSh {{ trade.return_amount }}</td>
+                        <td><span class="status-pill {{ trade.status }}">{{ trade.get_status_display }}</span></td>
+                        <td>{{ trade.created_at|date:"M d, Y" }}</td>
+                        <td>{{ trade.matures_at|date:"M d, Y" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6">No trade history yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
