@@ -97,7 +97,13 @@
         if (activeTab) activeTab.classList.add('active');
         if (activeContent) activeContent.classList.add('active');
         
-        if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        // Scroll only the tab bar container to keep the active tab visible/centered
+        const container = document.querySelector('.dashboard-tabs');
+        if (activeTab && container) {
+            const scrollPos = activeTab.offsetLeft - (container.offsetWidth / 2) + (activeTab.offsetWidth / 2);
+            container.scrollTo({ left: scrollPos, behavior: 'smooth' });
+        }
+        
         window.location.hash = tabId;
     }
 
