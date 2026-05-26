@@ -12,6 +12,14 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = ["username", "email", "phone", "password1", "password2"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Remove help text to keep the form clean
+        for field in self.fields.values():
+            field.help_text = ""
+        # Re-add specific help text for invite code if needed, but the user wants "unnecessary info" removed
+        # so we'll move procedures to the template bottom.
+
     def clean_invite_code(self):
         code = self.cleaned_data.get("invite_code", "").strip().upper()
         if code and not User.objects.filter(referral_code=code).exists():

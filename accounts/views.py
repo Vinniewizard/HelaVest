@@ -15,7 +15,11 @@ from .forms import RegisterForm
 
 
 def register(request):
-    form = RegisterForm(request.POST or None)
+    initial = {}
+    if "ref" in request.GET:
+        initial["invite_code"] = request.GET.get("ref")
+    
+    form = RegisterForm(request.POST or None, initial=initial)
     if request.method == "POST" and form.is_valid():
         user = form.save()
         login(request, user)

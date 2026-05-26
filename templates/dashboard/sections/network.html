@@ -11,7 +11,7 @@
     </section>
 
     {% if active_trades %}
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 30px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 16px; margin-bottom: 30px;">
         {% for trade in active_trades %}
             <article class="active-trade-card" style="padding: 24px; border-radius: 12px; border: 1px solid var(--line); background: white;">
                 <div class="plan-topline">
@@ -41,7 +41,7 @@
         </div>
     </section>
 
-    <div class="split" style="grid-template-columns: 1fr 1.3fr; gap: 24px;">
+    <div class="split">
         <!-- Referral Code Card -->
         <article style="background: linear-gradient(135deg, var(--navy) 0%, var(--primary-dark) 100%); color: white; padding: 30px; border-radius: 12px;">
             <span class="eyebrow" style="color: #ffd27b; font-size: 0.7rem;">Your Network Code</span>
